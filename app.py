@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, Response,session
 
-import bs4
+# import bs4
 import requests
 app = Flask(__name__)
 
