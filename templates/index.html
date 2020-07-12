@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Path Finder Project</title>
+
+<style type="text/css">
+
+
+  table, th, td {
+
+  border: 1px solid grey;
+  border-collapse: collapse;
+}
+
+td {
+ width: 25px;
+ height: 25px;
+}
+
+.visited{
+    background-color: blue;
+
+}
+
+.notvisited{
+   background-color: #e8e6e8;
+}
+
+.wall{
+  background-color: #12232e;
+}
+
+.startnode{
+  background-color: #a31d70;
+}
+
+.endnode{
+  background-color: #96091e;
+
+}
+.pathnode{
+  background-color: #6de8e0;
+}
+
+
+body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+</style>
+ <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+<body class="container-fluid">
+
+<header class="container-fluid">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+   
+
+<div class="btn-group">
+  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Choose Algorithm
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="#">Dijkstra</a>
+    <a class="dropdown-item" href="#">A* Search</a>
+    <a class="dropdown-item" href="#">Breadth First Search</a>
+  </div>
+</div>
+
+<!-- 
+<button type="button" class="btn btn-outline-warning" style="margin-left: 10px">Clear Path</button>
+
+<button type="button" style="margin-left: 10px" class="btn btn-outline-success" onclick="clearwall()">Clear Walls</button> -->
+<button type="button" style="margin-left: 10px" class="btn btn-outline-warning">Visualise Algorithm <span></span></button>
+
+<div class="wall" style="width:25px; height: 25px;   border: 1px solid white;margin-left: 25px;
+"></div> <label class="" style="color: white ;margin-left: 10px; margin-top: 10px;">Walls Node</label>
+
+
+
+<div  class="pathnode" style="width:25px; height: 25px;  border: 1px solid white; margin-left: 25px;
+"></div> 
+<label class="" style="color: white ;margin-left: 10px; margin-top: 10px; "> Path Node</label>
+
+
+<div class="visited pull-right"  style="width:25px; height: 25px;    border: 1px solid white;margin-left: 25px;
+"></div>
+<label class="" style="color: white ;margin-left: 10px; margin-top: 10px;"> Visited Node</label>
+
+
+
+<div class="notvisited pull-right"  style="width:25px; height: 25px;    border: 1px solid white;margin-left: 25px;
+"></div>
+<label class="" style="color: white ;margin-left: 10px; margin-top: 10px;"> Unvisited Node</label>
+
+
+<div class="startnode pull-right"  style="width:25px; height: 25px;    border: 1px solid white;margin-left: 25px;
+"></div>
+<label class="" style="color: white ;margin-left: 10px; margin-top: 10px;"> Start Node</label>
+
+
+<div class="endnode pull-right"  style="width:25px; height: 25px;    border: 1px solid white;margin-left: 25px;
+"></div>
+<label class="" style="color: white ;margin-left: 10px; margin-top: 10px;"> Destination Node</label>
+
+
+
+</nav>
+
+</header>
+
+{% block body %}
+
+<br>
+<br>
+<div class="container-fluid">
+  <table class="grid" draggable="false" id = "myGrid" >
+ 
+	{% for i in range(31) %}
+     	 <tr id="row{{i}}">
+     	   {% for j in range(71) %}
+        
+          {% if i==15 and j==20 %}
+            <td id="col{{j}}" class="startnode"   onmousedown="mousedown(this)"  onmouseover="changeColor(this)" onmouseup="mouseup(this)"   >   </td>
+
+            {% continue %}
+          {% endif %}
+
+          
+          {% if i==15 and j==50 %}
+         <td id="col{{j}}" class="endnode" onmouseup="mouseup(this)"  onmousedown="mousedown(this)"  onmouseover="changeColor(this)"   >   </td>
+
+             {%continue%}
+          {% endif %}
+
+               <td id="col{{j}}" class="notvisited"  onclick="mouseclick(this)" onmouseup="mouseup(this)"  onmousedown="mousedown(this)"  onmouseover="changeColor(this)"   >   </td>
+        
+
+         {% endfor %}	
+
+     	 </tr>
+
+    {% endfor %}
+
+</table>
+
+
+</div>
+
+<script>
+var mouseIsDown = false;
+var mouseIsUp = true;
+var f=0, g=0;
+function mouseclick(grid){
+
+  if ( grid.classList.contains('notvisited') ){
+grid.classList.remove('notvisited');
+
+ grid.classList.toggle('wall');
+}
+      // grid.classList.add("wall");
+}
+
+function mousedown(grid){
+  
+    if ( grid.classList.contains('startnode') ){
+        f=1;
+        grid.classList.remove('startnode');
+        grid.classList.toggle('notvisited');
+
+    }
+  
+
+  else  if ( grid.classList.contains('endnode') ){
+        g=1;
+        grid.classList.remove('endnode');
+        grid.classList.toggle('notvisited');
+
+    }
+
+ else{
+  mouseIsDown= true;
+  mouseIsUp = false;
+  }
+}
+
+function mouseup(grid){
+  
+  if(f==1 )
+  {
+    if(!grid.classList.contains('endnode'))
+      {
+         f=0;
+        grid.classList.remove('notvisited');
+        grid.classList.toggle('startnode');
+      }
+   
+  }
+
+
+   if(g==1 )
+  {
+       
+        if(!grid.classList.contains('startnode'))
+        {grid.classList.remove('notvisited');
+        grid.classList.toggle('endnode');  g=0;
+    }
+  }
+
+  mouseIsDown= false;
+  mouseIsUp= true;
+}
+
+function changeColor(grid){
+
+
+  if(mouseIsDown){
+
+
+if ( grid.classList.contains('notvisited') ){
+grid.classList.remove('notvisited');
+grid.classList.toggle('wall');
+}
+     
+
+  }
+}
+
+
+function clearwall(){
+
+var x=document.querySelector('.wall').id
+// console.log(x);
+var i;
+for (i = 0; i < x.length; i++) {
+
+  if ( x[i].classList.contains('wall') ){
+
+  x[i].classList.remove('wall');
+  x[i].classList.add('notvisited');
+}
+
+}
+
+
+}
+
+</script>
+
+
+
+
+<div id="myModal"  class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Instructions</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      <ul>
+        
+        <li>Click within the grid and drag the mouse to draw walls.</li>
+        <li>Drag the start and end node to any position.</li>
+        <li> Choose an algorithm from the navigation panel.</li>
+        <li>Click the Visulaise algorithm button to see the algorithms in action.</li>
+      </ul>
+
+
+
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+{%endblock%}
+
+<script type="text/javascript">
+  $('#myModal').modal('show')
+
+</script>
+</body>
+
+</html>
