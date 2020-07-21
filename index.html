@@ -13,8 +13,8 @@
 }
 
 td {
- width: 25px;
- height: 25px;
+ width: 30px;
+ height: 30px;
 }
 
 .visited{
@@ -40,7 +40,7 @@ td {
 
 }
 .pathnode{
-  background-color: #6de8e0;
+  background-color: red;
 }
 
 
@@ -128,18 +128,23 @@ body {
 
 
 </table>
-
+</div>
 <script >
   
-
-for (var i = 0; i < 30; i++){
+  var m = 28;
+  var n= 60;
+ var rs = m/2 -1;
+  var cs = n/3-5 ;
+ var ce = 2*n/3 +5;
+ 
+for (var i = 0; i < m; i++){
   
   tr = '<tr id="row'+i.toString()+'">'
   document.getElementById("myGrid").innerHTML += tr;
   ID = 'row'+i.toString();
 
 
-  for (var j = 0;j< 72 ;j++){
+  for (var j = 0;j< n ;j++){
        
        td =  '<td id="col'+ j.toString() +'" class="notvisited"  onclick="mouseclick(this)" onmouseup="mouseup(this)"  onmousedown="mousedown(this)"  onmouseover="changeColor(this)"   >   </td>'
 
@@ -147,14 +152,14 @@ for (var i = 0; i < 30; i++){
 
        tdend = '<td id="col'+ j.toString() +'" class="endnode" onmouseup="mouseup(this)"  onmousedown="mousedown(this)"  onmouseover="changeColor(this)"   >   </td>'
 
-        if(i== 14 && j== 20)
+        if(i== rs && j== cs)
         {
           document.getElementById(ID).innerHTML  += tdstart;
 
           continue;
         }
 
-        if(i== 14  && j== 50)
+        if(i== rs  && j== ce)
         {
 
           document.getElementById(ID).innerHTML  += tdend;
@@ -170,12 +175,8 @@ for (var i = 0; i < 30; i++){
     }
 }
 
-</script> 
-</div>
 
-<script>
-  var m =31;
-  var n=71;
+
 var mouseIsDown = false;
 var mouseIsUp = true;
 var f=0, g=0;
@@ -248,7 +249,7 @@ function mouseup(grid){
 function changeColor(grid){
 
 
-  if(mouseIsDown){
+if(mouseIsDown){
 
 
 if ( grid.classList.contains('notvisited') ){
@@ -266,28 +267,29 @@ grid.classList.toggle('notvisited');
 }
 
 
-function clearwall(){
+// function clearwall(){
 
-var x=document.querySelector('.wall').id
-// console.log(x);
-var i;
-for (i = 0; i < x.length; i++) {
+// var x=document.querySelector('.wall').id
+// // console.log(x);
+// var i;
+// for (i = 0; i < x.length; i++) {
 
-  if ( x[i].classList.contains('wall') ){
+//   if ( x[i].classList.contains('wall') ){
 
-  x[i].classList.remove('wall');
-  x[i].classList.add('notvisited');
-}
+//   x[i].classList.remove('wall');
+//   x[i].classList.add('notvisited');
+// }
 
-}
+// }
 
 
-}
+// }
 
 var matrix = [];
 var start =[];
 var dest = [];
 var parent =[];
+// get the matrix 
 function getGrid()
 {
 
@@ -373,15 +375,11 @@ function bfs(){
           }
           // printQueue() 
       } 
-    parent=[];
     var queue = new Queue();
+    parent = [];
     queue.enqueue(start);
-
     while(!queue.isEmpty() )
     {
-
-  
-
 
 
       var a= queue.peek();
@@ -390,13 +388,10 @@ function bfs(){
       var xcord = a[0];
       var ycord = a[1];
       
-
-  
-
-    
       for (var i=0;i<4;i++)
       {
 
+   
         var x = xcord  + dx[i];
         var y = ycord + dy[i];
 
@@ -405,9 +400,9 @@ function bfs(){
             continue;
           }
 
-           
 
-            parent[[x,y]] = a;
+
+            parent[[x,y]]= a;
           
             
           var id = '#row'+x.toString()+' #col'+y.toString();
@@ -420,7 +415,7 @@ function bfs(){
              cell.classList.toggle('visited');
              matrix[x][y]=2;
 
-            
+
            // console.log("reached here");
                // console.log(matrix);
 
@@ -429,26 +424,43 @@ function bfs(){
            }
 
            queue.enqueue([x,y]);
+
+
                       
 
         }
+
 
       }
     
 
 
-
     }
+ }
 
+function pathfinder(){
+  console.log("hadbfaehrbou");
 
+   if(matrix[dest[0]][dest[1]] != 2)
+   	 {
+   	 	return;
+   	 }
+   var a= dest;
+   var ans= [];
+   while( parent[a] != a  )
+   {
+      
+          var id = '#row'+a[0].toString()+' #col'+a[1].toString();
+          console.log(id);
+             cell = document.querySelector(id);
+             // cell.classList.remove('notvisited');
+             // cell.classList.remove('visited');
+             
+             // cell.classList.add('pathnode');
+   	         a = parent[a];
+   }
 
 }
-
-
-
-
-
-
 
 </script>
 
