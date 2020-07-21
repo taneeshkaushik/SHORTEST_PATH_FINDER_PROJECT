@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title> Path Finder Project</title>
+  <title> Path Finder Project</title>
 
 <style type="text/css">
 
@@ -18,6 +18,7 @@ td {
 }
 
 .visited{
+
     background-color: blue;
 
 }
@@ -79,9 +80,8 @@ body {
 
 <!-- 
 <button type="button" class="btn btn-outline-warning" style="margin-left: 10px">Clear Path</button>
-
 <button type="button" style="margin-left: 10px" class="btn btn-outline-success" onclick="clearwall()">Clear Walls</button> -->
-<button type="button" style="margin-left: 10px" class="btn btn-outline-warning">Visualise Algorithm <span></span></button>
+<button type="button" style="margin-left: 10px" onclick="bfs()" class="btn btn-outline-warning">Visualise Algorithm <span></span></button>
 
 <div class="wall" style="width:25px; height: 25px;   border: 1px solid white;margin-left: 25px;
 "></div> <label class="" style="color: white ;margin-left: 10px; margin-top: 10px;">Walls Node</label>
@@ -119,45 +119,63 @@ body {
 
 </header>
 
-{% block body %}
 
 <br>
 <br>
 <div class="container-fluid">
-  <table class="grid" draggable="false" id = "myGrid" >
- 
-	{% for i in range(31) %}
-     	 <tr id="row{{i}}">
-     	   {% for j in range(71) %}
-        
-          {% if i==15 and j==20 %}
-            <td id="col{{j}}" class="startnode"   onmousedown="mousedown(this)"  onmouseover="changeColor(this)" onmouseup="mouseup(this)"   >   </td>
 
-            {% continue %}
-          {% endif %}
+<table class="grid" draggable="false" id = "myGrid" >
 
-          
-          {% if i==15 and j==50 %}
-         <td id="col{{j}}" class="endnode" onmouseup="mouseup(this)"  onmousedown="mousedown(this)"  onmouseover="changeColor(this)"   >   </td>
-
-             {%continue%}
-          {% endif %}
-
-               <td id="col{{j}}" class="notvisited"  onclick="mouseclick(this)" onmouseup="mouseup(this)"  onmousedown="mousedown(this)"  onmouseover="changeColor(this)"   >   </td>
-        
-
-         {% endfor %}	
-
-     	 </tr>
-
-    {% endfor %}
 
 </table>
 
+<script >
+  
 
+for (var i = 0; i < 30; i++){
+  
+  tr = '<tr id="row'+i.toString()+'">'
+  document.getElementById("myGrid").innerHTML += tr;
+  ID = 'row'+i.toString();
+
+
+  for (var j = 0;j< 72 ;j++){
+       
+       td =  '<td id="col'+ j.toString() +'" class="notvisited"  onclick="mouseclick(this)" onmouseup="mouseup(this)"  onmousedown="mousedown(this)"  onmouseover="changeColor(this)"   >   </td>'
+
+       tdstart = '<td id="col'+ j.toString() +'" class="startnode"   onmousedown="mousedown(this)"  onmouseover="changeColor(this)" onmouseup="mouseup(this)"   >   </td>'
+
+       tdend = '<td id="col'+ j.toString() +'" class="endnode" onmouseup="mouseup(this)"  onmousedown="mousedown(this)"  onmouseover="changeColor(this)"   >   </td>'
+
+        if(i== 14 && j== 20)
+        {
+          document.getElementById(ID).innerHTML  += tdstart;
+
+          continue;
+        }
+
+        if(i== 14  && j== 50)
+        {
+
+          document.getElementById(ID).innerHTML  += tdend;
+
+          continue;
+
+        }
+
+         document.getElementById(ID).innerHTML  += td;
+
+
+     
+    }
+}
+
+</script> 
 </div>
 
 <script>
+  var m =31;
+  var n=71;
 var mouseIsDown = false;
 var mouseIsUp = true;
 var f=0, g=0;
@@ -168,7 +186,13 @@ grid.classList.remove('notvisited');
 
  grid.classList.toggle('wall');
 }
-      // grid.classList.add("wall");
+
+
+else if ( grid.classList.contains('wall') ){
+grid.classList.remove('wall');
+grid.classList.toggle('notvisited');
+}
+
 }
 
 function mousedown(grid){
@@ -231,6 +255,11 @@ if ( grid.classList.contains('notvisited') ){
 grid.classList.remove('notvisited');
 grid.classList.toggle('wall');
 }
+
+else if ( grid.classList.contains('wall') ){
+grid.classList.remove('wall');
+grid.classList.toggle('notvisited');
+}
      
 
   }
@@ -254,6 +283,172 @@ for (i = 0; i < x.length; i++) {
 
 
 }
+
+var matrix = [];
+var start =[];
+var dest = [];
+var parent =[];
+function getGrid()
+{
+
+  for (var i=0 ;i< m;i++)
+  {
+    matrix[i] = new Array();
+    for (var j=0;j< n;j++)
+    {
+      var id = '#row'+i.toString()+' #col'+j.toString();
+       cell = document.querySelector(id);
+       
+       if(cell.classList.contains('wall')){
+
+            matrix[i].push(1);
+       } 
+       else if (cell.classList.contains('notvisited')) {
+            
+            matrix[i].push(0);
+
+       }
+       else if (cell.classList.contains('startnode')){
+            matrix[i].push('s');
+            start = [i,j];
+
+       } 
+
+       else if (cell.classList.contains('endnode')){
+           matrix[i].push('d');
+           dest = [i,j];
+       }
+
+    }
+
+  }
+
+// console.log(matrix);
+
+}
+
+
+function isValid(x,y){
+
+  if(x>=0 && x< m && y>=0 && y< n){
+     return 1;
+  }
+
+  return 0;
+}
+
+
+
+function bfs(){
+   
+    getGrid();
+    // console.log(matrix);
+    var dx=[1,-1,0,0];
+    var dy=[0,0,-1,1];
+// Queue class 
+      class Queue 
+      { 
+          // Array is used to implement a Queue 
+          constructor() 
+          { 
+              this.items = []; 
+          } 
+                        
+          // Functions to be implemented 
+          enqueue(item) {
+            this.items.push(item); 
+          }
+          dequeue() {
+            if(this.isEmpty()) 
+                  return 0; 
+               return this.items.shift();
+          }
+          peek(){
+             if(this.isEmpty()) 
+                return 0; 
+               return this.items[0];
+          } 
+          isEmpty() {
+            return this.items.length == 0; 
+          }
+          // printQueue() 
+      } 
+    parent=[];
+    var queue = new Queue();
+    queue.enqueue(start);
+
+    while(!queue.isEmpty() )
+    {
+
+  
+
+
+
+      var a= queue.peek();
+      queue.dequeue();
+
+      var xcord = a[0];
+      var ycord = a[1];
+      
+
+  
+
+    
+      for (var i=0;i<4;i++)
+      {
+
+        var x = xcord  + dx[i];
+        var y = ycord + dy[i];
+
+        if ( isValid(x,y)){
+          if(matrix[x][y] ==2 || matrix[x][y] ==1){
+            continue;
+          }
+
+           
+
+            parent[[x,y]] = a;
+          
+            
+          var id = '#row'+x.toString()+' #col'+y.toString();
+           cell = document.querySelector(id);
+           // if(cell.classList.contains('notvisited')){
+
+             
+
+             cell.classList.remove('notvisited');
+             cell.classList.toggle('visited');
+             matrix[x][y]=2;
+
+            
+           // console.log("reached here");
+               // console.log(matrix);
+
+           if(x== dest[0] && y==dest[1]){
+            return;
+           }
+
+           queue.enqueue([x,y]);
+                      
+
+        }
+
+      }
+    
+
+
+
+    }
+
+
+
+}
+
+
+
+
+
+
 
 </script>
 
@@ -287,7 +482,6 @@ for (i = 0; i < x.length; i++) {
   </div>
 </div>
 
-{%endblock%}
 
 <script type="text/javascript">
   $('#myModal').modal('show')
