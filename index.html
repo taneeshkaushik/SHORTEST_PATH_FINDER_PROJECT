@@ -351,9 +351,8 @@ function bfs()
   
   
     getGrid();
-    var w=13;
-    var z=17;
-    var dest = [w,z];
+    
+    
     var g=[13,17];
     if(dest==g)
     {
@@ -366,33 +365,7 @@ function bfs()
     parent=new Map();
   
 // Queue class 
-      class Queue 
-      { 
-          // Array is used to implement a Queue 
-          constructor() 
-          { 
-              this.items = [] 
-          } 
-                        
-          // Functions to be implemented 
-          enqueue(item) {
-            this.items.push(item); 
-          }
-          dequeue() {
-            if(this.isEmpty()) 
-                  return 0; 
-               return this.items.shift();
-          }
-          peek(){
-             if(this.isEmpty()) 
-                return 0; 
-               return this.items[0];
-          } 
-          isEmpty() {
-            return this.items.length == 0; 
-          }
-          // printQueue() 
-      } 
+
     var queue = [];
       parent.clear();
       var start=[13,15];
@@ -431,17 +404,16 @@ function bfs()
           
           parent.set(b,a);
           
-          var z= parent.get(b);
+          // var z= parent.get(b);
           
-          console.log(z);
+          // console.log(z);
           
-          console.log(parent.get(z));
-          console.log("parent");
+          // console.log(parent.get(z));
+          // console.log("parent");
             
           var id = '#row'+x.toString()+' #col'+y.toString();
           cell = document.querySelector(id);
            // if(cell.classList.contains('notvisited')){
-
             cell.classList.remove('notvisited');
             cell.classList.toggle('visited');
             matrix[x][y]=2;
@@ -452,17 +424,25 @@ function bfs()
            if(b[0]==dest[0] && b[1]==dest[1])
            {  
 
-            var entry=parent.entries();
-            console.log(entry);
-              console.log("helllooooooooooooo");
-              
-              var f=parent.get(b);
+                while(1)
+                {
+                  var a= parent.get(b);
+                  if(a[0]==b[0]&& a[1]==b[1])
+                  {
+                    return;
+                  }
 
-              console.log(f);
-              //window.alert("Path found");
-              console.log(parent.get(f));
-              console.log("I am parent");
-              return;
+                  b=a;
+                  var id = '#row'+b[0].toString()+' #col'+b[1].toString();
+                  cell = document.querySelector(id);
+           // if(cell.classList.contains('notvisited')){
+                  cell.classList.remove('visited');
+                  cell.classList.toggle('notvisited');
+                  console.log(a);
+                  
+                }
+            window.alert("Hey Rover successful");
+            return 
            }
             queue.push(b);
         }
