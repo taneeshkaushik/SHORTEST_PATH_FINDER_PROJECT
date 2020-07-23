@@ -351,7 +351,9 @@ function bfs()
   
   
     getGrid();
-    var dest = [13,17];
+    var w=13;
+    var z=17;
+    var dest = [w,z];
     var g=[13,17];
     if(dest==g)
     {
@@ -369,7 +371,7 @@ function bfs()
           // Array is used to implement a Queue 
           constructor() 
           { 
-              this.items = []; 
+              this.items = [] 
           } 
                         
           // Functions to be implemented 
@@ -391,21 +393,23 @@ function bfs()
           }
           // printQueue() 
       } 
-    var queue = new Queue();
+    var queue = [];
       parent.clear();
-
-    queue.enqueue(start);
+      var start=[13,15];
+    queue.push(start);
     parent.set(start, start);
 
     var flag=0;
-    while(!queue.isEmpty() )
+    while(queue.length!=0 )
     {
       
-
-      var a= queue.peek();
       
-      queue.dequeue();
+     // var a= queue.peek();
+     var  a= queue[0];
 
+      
+      //queue.dequeue();
+      queue.shift();
       var xcord = a[0];
       var ycord = a[1];
       
@@ -418,22 +422,25 @@ function bfs()
 
         if (isValid(x,y))
         {
-          if(matrix[x][y]==2 || matrix[x][y]==1){
+          if(matrix[x][y]==2 || matrix[x][y]==1)
+          {
             continue;
           }
 
           var b=[x,y];
           
           parent.set(b,a);
-          console.log(a);
-          console.log(b);
-
+          
+          var z= parent.get(b);
+          
+          console.log(z);
+          
+          console.log(parent.get(z));
+          console.log("parent");
             
           var id = '#row'+x.toString()+' #col'+y.toString();
           cell = document.querySelector(id);
            // if(cell.classList.contains('notvisited')){
-
-             
 
             cell.classList.remove('notvisited');
             cell.classList.toggle('visited');
@@ -443,24 +450,26 @@ function bfs()
                // console.log(matrix);
             
            if(b[0]==dest[0] && b[1]==dest[1])
-           {
+           {  
 
+            var entry=parent.entries();
+            console.log(entry);
               console.log("helllooooooooooooo");
               
               var f=parent.get(b);
+
               console.log(f);
-              window.alert("Path found");
+              //window.alert("Path found");
               console.log(parent.get(f));
               console.log("I am parent");
               return;
            }
-            queue.enqueue([x,y]);
+            queue.push(b);
         }
         
       }
 
     }
-
 
     window.alert("Path is not possible, please remove some walls!!!");
     
