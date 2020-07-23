@@ -131,6 +131,7 @@ body {
 </div>
 <script >
   
+  var parent=new Map();
   var m = 28;
   var n= 60;
  var rs = m/2 -1;
@@ -155,7 +156,6 @@ for (var i = 0; i < m; i++){
         if(i== rs && j== cs)
         {
           document.getElementById(ID).innerHTML  += tdstart;
-
           continue;
         }
 
@@ -176,7 +176,6 @@ for (var i = 0; i < m; i++){
 }
 
 
-
 var mouseIsDown = false;
 var mouseIsUp = true;
 var f=0, g=0;
@@ -189,9 +188,10 @@ grid.classList.remove('notvisited');
 }
 
 
-else if ( grid.classList.contains('wall') ){
-grid.classList.remove('wall');
-grid.classList.toggle('notvisited');
+else if ( grid.classList.contains('wall') )
+{
+  grid.classList.remove('wall');
+  grid.classList.toggle('notvisited');
 }
 
 }
@@ -204,9 +204,9 @@ function mousedown(grid){
         grid.classList.toggle('notvisited');
 
     }
-  
 
-  else  if ( grid.classList.contains('endnode') ){
+  else  if ( grid.classList.contains('endnode') )
+  {
         g=1;
         grid.classList.remove('endnode');
         grid.classList.toggle('notvisited');
@@ -219,7 +219,8 @@ function mousedown(grid){
   }
 }
 
-function mouseup(grid){
+function mouseup(grid)
+{
   
   if(f==1 )
   {
@@ -233,7 +234,7 @@ function mouseup(grid){
   }
 
 
-   if(g==1 )
+  if(g==1 )
   {
        
         if(!grid.classList.contains('startnode'))
@@ -244,6 +245,7 @@ function mouseup(grid){
 
   mouseIsDown= false;
   mouseIsUp= true;
+
 }
 
 function changeColor(grid){
@@ -290,6 +292,8 @@ var start =[];
 var dest = [];
 var parent =[];
 // get the matrix 
+
+
 function getGrid()
 {
 
@@ -301,27 +305,29 @@ function getGrid()
       var id = '#row'+i.toString()+' #col'+j.toString();
        cell = document.querySelector(id);
        
-       if(cell.classList.contains('wall')){
+       if(cell.classList.contains('wall'))
+       {
 
             matrix[i].push(1);
        } 
-       else if (cell.classList.contains('notvisited')) {
-            
+       else if (cell.classList.contains('notvisited')) 
+       {     
             matrix[i].push(0);
-
        }
-       else if (cell.classList.contains('startnode')){
+       else if (cell.classList.contains('startnode'))
+       {
             matrix[i].push('s');
             start = [i,j];
-
        } 
 
-       else if (cell.classList.contains('endnode')){
+       else if (cell.classList.contains('endnode'))
+       {
            matrix[i].push('d');
            dest = [i,j];
        }
 
     }
+
 
   }
 
@@ -340,13 +346,18 @@ function isValid(x,y){
 }
 
 
-
-function bfs(){
-   
+function bfs()
+{
+  
+  
     getGrid();
-    // console.log(matrix);
+    var dest = [13,17];
+    var parent=new Map();
     var dx=[1,-1,0,0];
     var dy=[0,0,-1,1];
+    
+     parent=new Map();
+  
 // Queue class 
       class Queue 
       { 
@@ -376,13 +387,18 @@ function bfs(){
           // printQueue() 
       } 
     var queue = new Queue();
-    parent = [];
+      parent.clear();
+  
+   
     queue.enqueue(start);
+    parent.set(start, start);
+
+    var flag=0;
     while(!queue.isEmpty() )
     {
 
-
       var a= queue.peek();
+      
       queue.dequeue();
 
       var xcord = a[0];
@@ -395,72 +411,60 @@ function bfs(){
         var x = xcord  + dx[i];
         var y = ycord + dy[i];
 
-        if ( isValid(x,y)){
+        if (isValid(x,y)){
           if(matrix[x][y] ==2 || matrix[x][y] ==1){
             continue;
           }
 
-
-
-            parent[[x,y]]= a;
+          var b=[x,y];
+          
+          parent.set(b,a);
+          console.log("parent");
+          console.log(parent.get(b));
+          console.log(a);
+          console.log(b);
           
             
           var id = '#row'+x.toString()+' #col'+y.toString();
-           cell = document.querySelector(id);
+          cell = document.querySelector(id);
            // if(cell.classList.contains('notvisited')){
 
              
 
-             cell.classList.remove('notvisited');
-             cell.classList.toggle('visited');
-             matrix[x][y]=2;
-
+            cell.classList.remove('notvisited');
+            cell.classList.toggle('visited');
+            matrix[x][y]=2;
 
            // console.log("reached here");
                // console.log(matrix);
+            
+           if(x==dest[0] && y==dest[1])
+           {
 
-           if(x== dest[0] && y==dest[1]){
-            return;
+              console.log("helllooooooooooooo");
+              var e= dest;
+              console.log(e);
+              var f=parent.get(e);
+              console.log(f);
+              window.alert("Path found");
+              console.log(parent.get(f));
+              console.log("I am parent");
+              return;
            }
 
-           queue.enqueue([x,y]);
-
-
-                      
-
+            queue.enqueue([x,y]);
         }
-
-
+        
       }
-    
-
 
     }
+
+
+    window.alert("Path is not possible, please remove some walls!!!");
+    
  }
 
-function pathfinder(){
-  console.log("hadbfaehrbou");
 
-   if(matrix[dest[0]][dest[1]] != 2)
-   	 {
-   	 	return;
-   	 }
-   var a= dest;
-   var ans= [];
-   while( parent[a] != a  )
-   {
-      
-          var id = '#row'+a[0].toString()+' #col'+a[1].toString();
-          console.log(id);
-             cell = document.querySelector(id);
-             // cell.classList.remove('notvisited');
-             // cell.classList.remove('visited');
-             
-             // cell.classList.add('pathnode');
-   	         a = parent[a];
-   }
-
-}
 
 </script>
 
@@ -485,9 +489,6 @@ function pathfinder(){
         <li> Choose an algorithm from the navigation panel.</li>
         <li>Click the Visulaise algorithm button to see the algorithms in action.</li>
       </ul>
-
-
-
       </div>
       
     </div>
