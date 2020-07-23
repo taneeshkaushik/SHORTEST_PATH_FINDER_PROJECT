@@ -352,11 +352,16 @@ function bfs()
   
     getGrid();
     var dest = [13,17];
+    var g=[13,17];
+    if(dest==g)
+    {
+      console.log("I am bfs");
+    }
     var parent=new Map();
     var dx=[1,-1,0,0];
     var dy=[0,0,-1,1];
     
-     parent=new Map();
+    parent=new Map();
   
 // Queue class 
       class Queue 
@@ -388,14 +393,14 @@ function bfs()
       } 
     var queue = new Queue();
       parent.clear();
-  
-   
+
     queue.enqueue(start);
     parent.set(start, start);
 
     var flag=0;
     while(!queue.isEmpty() )
     {
+      
 
       var a= queue.peek();
       
@@ -411,19 +416,18 @@ function bfs()
         var x = xcord  + dx[i];
         var y = ycord + dy[i];
 
-        if (isValid(x,y)){
-          if(matrix[x][y] ==2 || matrix[x][y] ==1){
+        if (isValid(x,y))
+        {
+          if(matrix[x][y]==2 || matrix[x][y]==1){
             continue;
           }
 
           var b=[x,y];
           
           parent.set(b,a);
-          console.log("parent");
-          console.log(parent.get(b));
           console.log(a);
           console.log(b);
-          
+
             
           var id = '#row'+x.toString()+' #col'+y.toString();
           cell = document.querySelector(id);
@@ -438,20 +442,18 @@ function bfs()
            // console.log("reached here");
                // console.log(matrix);
             
-           if(x==dest[0] && y==dest[1])
+           if(b[0]==dest[0] && b[1]==dest[1])
            {
 
               console.log("helllooooooooooooo");
-              var e= dest;
-              console.log(e);
-              var f=parent.get(e);
+              
+              var f=parent.get(b);
               console.log(f);
               window.alert("Path found");
               console.log(parent.get(f));
               console.log("I am parent");
               return;
            }
-
             queue.enqueue([x,y]);
         }
         
