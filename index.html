@@ -130,7 +130,8 @@ body {
 </table>
 </div>
 <script >
-  
+ 
+
   var parent=new Map();
   var m = 28;
   var n= 60;
@@ -292,11 +293,11 @@ var start =[];
 var dest = [];
 var parent =[];
 // get the matrix 
-
+var flag=0;
 
 function getGrid()
 {
-
+  flag=0;
   for (var i=0 ;i< m;i++)
   {
     matrix[i] = new Array();
@@ -335,7 +336,7 @@ function getGrid()
 
 }
 
-var flag=0;
+
 
 function isValid(x,y){
 
@@ -351,20 +352,16 @@ function sleep(ms) {
 }
 
 
-async function bfs()
+ async function bfs(flag)
 {
+  
+  console.log(flag);
+  console.log("bfs");
   if(flag==1)
-  return;
+    return;
   else flag=1;
   
     getGrid();
-
-    
-    var g=[13,17];
-    if(dest==g)
-    {
-      console.log("I am bfs");
-    }
     var parent=new Map();
     var dx=[1,-1,0,0];
     var dy=[0,0,-1,1];
@@ -375,7 +372,7 @@ async function bfs()
 
     var queue = [];
       parent.clear();
-      var start=[13,15];
+      
     queue.push(start);
     parent.set(start, start);
 
@@ -384,11 +381,11 @@ async function bfs()
     {
       
       
-     // var a= queue.peek();
+     
      var  a= queue[0];
 
       
-      //queue.dequeue();
+      
       queue.shift();
       var xcord = a[0];
       var ycord = a[1];
@@ -411,22 +408,16 @@ async function bfs()
           
           parent.set(b,a);
           
-          // var z= parent.get(b);
           
-          // console.log(z);
-          
-          // console.log(parent.get(z));
-          // console.log("parent");
             
           var id = '#row'+x.toString()+' #col'+y.toString();
           cell = document.querySelector(id);
-           // if(cell.classList.contains('notvisited')){
+          
             cell.classList.remove('notvisited');
             cell.classList.toggle('visited');
             matrix[x][y]=2;
             await sleep(5);
-           // console.log("reached here");
-               // console.log(matrix);
+           
             
            if(b[0]==dest[0] && b[1]==dest[1])
            {  
@@ -447,7 +438,7 @@ async function bfs()
            // if(cell.classList.contains('notvisited')){
                   cell.classList.remove('visited');
                   cell.classList.toggle('notvisited');
-                  console.log(a);
+                  
                   
                 }
             
