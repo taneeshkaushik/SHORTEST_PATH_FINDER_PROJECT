@@ -217,13 +217,13 @@ grid.classList.remove('notvisited');
  grid.classList.add('wall');
 }
 
-if ( grid.classList.contains('visited') ){
+else if ( grid.classList.contains('visited') ){
 grid.classList.remove('visited');
 
  grid.classList.add('wall');
 }
 
-if ( grid.classList.contains('pathnode') ){
+else if ( grid.classList.contains('pathnode') ){
 grid.classList.remove('pathnode');
  grid.classList.add('wall');
 }
