@@ -94,12 +94,12 @@ body {
 
 <div class="form-check-inline" style="margin-left: 5px;">
   <label class="form-check-label" style="color: white;">
-    <input   id ="myRadio"  type="radio" class="form-check-input" name="optradio" checked="true"> Allow Horizontal Traversal
+    <input   id ="myRadio"  type="radio" class="form-check-input" name="optradio" checked="true"> Non Diagonal Traversal
   </label>
 </div>
 <div class="form-check-inline">
   <label class="form-check-label" style="color: white;">
-    <input id ="myRadio2" type="radio" class="form-check-input" name="optradio"> Allow Diagonal Traversal
+    <input id ="myRadio2" type="radio" class="form-check-input" name="optradio">  Diagonal Traversal
   </label>
 </div>
 
@@ -827,9 +827,10 @@ var size=4;
         <li>Click within the grid and drag the mouse to draw walls.</li>
         <li>Drag the start and end node to any position.</li>
         <li> Choose an algorithm from the navigation panel.</li>
-        <li>Click the Visualise algorithm button to see the algorithms in action.</li>
+        <li> Click the Visualise algorithm button to see the algorithms in action.</li>
         <li> You can choose whether to traverse diagonally or not.</li>
         <li> In case of a-star algorithm you can choose heuristics involved for path finding.</li>
+        <li> If non-diagonal traversal is selected Manhatten heuristic is advisable. </li>
       </ul>
       </div>
       
