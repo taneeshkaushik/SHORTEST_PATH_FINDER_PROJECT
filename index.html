@@ -97,7 +97,7 @@ body {
 
 <!-- 
 <button type="button" class="btn btn-outline-warning" style="margin-left: 10px">Clear Path</button>-->
-<button type="button" style="margin-left: 10px" onclick="bfs()" class="btn btn-outline-warning">Visualise Breadth First Search <span></span></button>
+<button type="button" style="margin-left: 10px" onclick="astar()" class="btn btn-outline-warning">Visualise Breadth First Search <span></span></button>
 
 <button type="button" style="margin-left: 10px" class="btn btn-outline-success" onclick="clearwall()">Clear Walls</button> 
 
@@ -111,7 +111,6 @@ body {
     <input id ="myRadio2" type="radio" class="form-check-input" name="optradio"> Allow Diagonal Traversal
   </label>
 </div>
-
 
 
 <div class="wall" style="width:25px; height: 25px;   border: 1px solid white;margin-left: 25px;
@@ -387,6 +386,11 @@ var dest = [];
 var parent =[];
 // get the matrix 
 var flag=0;
+var graph=[];
+var closedmatrix=[];
+
+var dx=[1,-1,0,0,1,-1,1,-1];
+    var dy=[0,0,-1,1,1,-1,-1,1];
 
 function getGrid()
 {
@@ -470,8 +474,7 @@ async function bfs(flag)
    
 
     var parent=new Map();
-    var dx=[1,-1,0,0,1,-1,1,-1];
-    var dy=[0,0,-1,1,1,-1,-1,1];
+ 
     
     parent=new Map();
   
@@ -576,44 +579,53 @@ async function bfs(flag)
     window.alert("Path is not possible, please remove some walls!!!");
     
  }
+ 
 
-
-function hval(i , j, dest)
+function hval(i , j, dest, heur)
 {
-  return math.sqrt(((row - dest[0])*(row-dest[0])) + ((col-dest[0])*(col-dest[0])));
+  if(heur==1)
+  {
+    return abs(i-dest[0])+abs(j-dest[1]);
+  }
+  if(heur==2)
+    return max(abs(i-dest[0]), abs(j-dest[1]));
+  
+      return Math.sqrt(((i - dest[0])*(i-dest[0])) + ((j-dest[1])*(j-dest[1])));
 
 }
+
+
+
 function astar()
 {
   class Node 
   {
-    x;
-    y;
-    g;
-    h;
-    f;
-    parent;
-    iswall;
+    
     constructor()
     {
-      iswall =0;
-      x=-1;
-      y=-1;
-      g=-1;
-      h=-1;
-      f=-1;
-      parent=[-1,-1];
+      this.iswall =0;
+      this.x=-1;
+      this.y=-1;
+      this.g=-1;
+      this.h=-1;
+      this.f=-1;
+      this.parent=[-1,-1];
     }
     
   }
+  reset();
+  getGrid();
 
 
   for (var i=0 ;i< m;i++)
   {
-    graph[i] = new Array();
+      graph[i]= new Array();
+      
     for (var j=0;j< n;j++)
     {
-      node= new Node();
+     
+      
+       var node= new Node();
        node.x=i;
        node.y=j;
        var id = '#row'+i.toString()+' #col'+j.toString();
@@ -623,9 +635,16 @@ function astar()
             node.iswall=1;
        }
 
-       graph[i].push(node); 
+      graph[i].push(node);
     }
+   
+    
   }
+
+
+
+  
+ var closedmatrix=[];
 
   for (var i=0 ;i< m;i++)
   {
@@ -637,56 +656,72 @@ function astar()
   }
 
   var a=start[0];
-  var b=start[1];
+   var b=start[1];
+   console.log(a);
+   console.log(b);
+  console.log(start);
+//console.log(graph[0][0]);
   graph[a][b].f=0;
   graph[a][b].g=0;
   graph[a][b].h=0;
   graph[a][b].parent[0]=a;
   graph[a][b].parent[1]=b;
 
-  
 
-  openlist=new List();
-  console.log(list);
+
+  openlist=[];
+  
   var x=[a,b];
-  openlist.push(x);
-  while(openlist.length()!=0)
+  openlist.push(graph[a][b]);
+  while(openlist.length!=0)
   {
-    var n=openlist.length();
+    console.log(openlist.length);
+    var k=openlist.length;
     var a=openlist[0];
-    for(var i=1;i<n;i++)
+    var index=0;
+    for(var i=1;i<k;i++)
     {
       if(openlist[i].f<a.f)
       {
         a=openlist[i];
+        index=i;
+
       }
     }
+     openlist.splice(index,1);
     
     closedmatrix[a.x][a.y]=1;
-    openlist.delete(a);
+    var id = '#row'+a.x.toString()+' #col'+a.y.toString();
+          cell = document.querySelector(id);
+          
+        cell.classList.remove('notvisited');
+        cell.classList.add('visited');
+    
     var gnew, hnew,fnew;
     var x, y;
     x=a.x;
     y=a.y;
-    for(var p=0;p<size;p++)
+    for(var p=0;p<4;p++)
     { 
       var i=  a.x+dx[p];
       var j=a.y+ dy[p];
-      if(!isvalid(i,j))
+      if(!isValid(i,j))
         continue;
       
       if(dest[0]==i && dest[1]==j)
       { 
         graph[i][j].parent=[x,y];
-        trace();
-        return;
-        
+        while(graph[i][j].parent[0]!=i && graph[i][j].parent[1]!=j)
+        {
+          //// color kardio ise green
+        }
+        return;  
       }
 
       if(closedmatrix[i][j]==0 && graph[i][j].iswall==0)
       {
         gnew=graph[x][y].g+1.0;
-        hnew=hval(i,j);
+        hnew=hval(i,j,dest);
         fnew=gnew+hnew;
 
         if(graph[i][j].f==-1 || graph[i][j].f>fnew)
@@ -695,7 +730,7 @@ function astar()
           graph[i][j].g=gnew;
           graph[i][j].h=hnew;
           graph[i][j].parent=[x,y];
-          openlist.inset(graph[i][j]);
+          openlist.push(graph[i][j]);
         }
         
       }
