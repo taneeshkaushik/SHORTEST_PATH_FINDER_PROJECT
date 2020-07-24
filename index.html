@@ -445,26 +445,19 @@ function sleep(ms) {
 }
 
 
- async function bfs(flag)
+async function bfs(flag)
 {
   
-  console.log(flag);
-  console.log("bfs");
+  
 	reset();
   if(flag==1)
     return;
   else flag=1;
   
     getGrid();
-<<<<<<< HEAD
-=======
 
     
-    var g=[13,17];
-    if(dest==g)
-    {
-      console.log("I am bfs");
-    }
+    
    var size=4;
    if(document.getElementById("myRadio").checked)
    {
@@ -476,7 +469,6 @@ function sleep(ms) {
    }
    
 
->>>>>>> 9a1020fe6e03ea4096ef48b5c00b2e77f93e7a11
     var parent=new Map();
     var dx=[1,-1,0,0,1,-1,1,-1];
     var dy=[0,0,-1,1,1,-1,-1,1];
@@ -585,6 +577,137 @@ function sleep(ms) {
     
  }
 
+
+function hval(i , j, dest)
+{
+  return math.sqrt(((row - dest[0])*(row-dest[0])) + ((col-dest[0])*(col-dest[0])));
+
+}
+function astar()
+{
+  class Node 
+  {
+    x;
+    y;
+    g;
+    h;
+    f;
+    parent;
+    iswall;
+    constructor()
+    {
+      iswall =0;
+      x=-1;
+      y=-1;
+      g=-1;
+      h=-1;
+      f=-1;
+      parent=[-1,-1];
+    }
+    
+  }
+
+
+  for (var i=0 ;i< m;i++)
+  {
+    graph[i] = new Array();
+    for (var j=0;j< n;j++)
+    {
+      node= new Node();
+       node.x=i;
+       node.y=j;
+       var id = '#row'+i.toString()+' #col'+j.toString();
+       cell = document.querySelector(id);
+       if(cell.classList.contains('wall'))
+       {
+            node.iswall=1;
+       }
+
+       graph[i].push(node); 
+    }
+  }
+
+  for (var i=0 ;i< m;i++)
+  {
+    closedmatrix[i] = new Array();
+    for (var j=0;j< n;j++)
+    {
+      closedmatrix[i].push(0); 
+    }
+  }
+
+  var a=start[0];
+  var b=start[1];
+  graph[a][b].f=0;
+  graph[a][b].g=0;
+  graph[a][b].h=0;
+  graph[a][b].parent[0]=a;
+  graph[a][b].parent[1]=b;
+
+  
+
+  openlist=new List();
+  console.log(list);
+  var x=[a,b];
+  openlist.push(x);
+  while(openlist.length()!=0)
+  {
+    var n=openlist.length();
+    var a=openlist[0];
+    for(var i=1;i<n;i++)
+    {
+      if(openlist[i].f<a.f)
+      {
+        a=openlist[i];
+      }
+    }
+    
+    closedmatrix[a.x][a.y]=1;
+    openlist.delete(a);
+    var gnew, hnew,fnew;
+    var x, y;
+    x=a.x;
+    y=a.y;
+    for(var p=0;p<size;p++)
+    { 
+      var i=  a.x+dx[p];
+      var j=a.y+ dy[p];
+      if(!isvalid(i,j))
+        continue;
+      
+      if(dest[0]==i && dest[1]==j)
+      { 
+        graph[i][j].parent=[x,y];
+        trace();
+        return;
+        
+      }
+
+      if(closedmatrix[i][j]==0 && graph[i][j].iswall==0)
+      {
+        gnew=graph[x][y].g+1.0;
+        hnew=hval(i,j);
+        fnew=gnew+hnew;
+
+        if(graph[i][j].f==-1 || graph[i][j].f>fnew)
+        {
+          graph[i][j].f=fnew;
+          graph[i][j].g=gnew;
+          graph[i][j].h=hnew;
+          graph[i][j].parent=[x,y];
+          openlist.inset(graph[i][j]);
+        }
+        
+      }
+
+
+    }
+
+  }
+
+  window.alert("NO path possible, please remove some walls!!!");
+
+}
 
 
 </script>
