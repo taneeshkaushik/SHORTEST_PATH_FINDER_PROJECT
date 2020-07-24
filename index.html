@@ -8,39 +8,56 @@
 
   table, th, td {
 
-  border: 1px solid grey;
+  border: 1px  #aca8ad;
   border-collapse: collapse;
 }
 
 td {
  width: 30px;
  height: 30px;
+
+box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+
 }
+
+
 
 .visited{
 
-    background-color: blue;
+    background-color: #59f7f7;
+
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
 
 }
 
 .notvisited{
-   background-color: #e8e6e8;
+   background-color: white;
+   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+
 }
 
 .wall{
   background-color: #12232e;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+
 }
 
 .startnode{
-  background-color: #a31d70;
+  background-color: #b53550;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+
 }
 
 .endnode{
-  background-color: #96091e;
+  background-color: #4960a3;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+
 
 }
 .pathnode{
-  background-color: red;
+  background-color: lightgreen;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+
 }
 
 
@@ -66,9 +83,9 @@ body {
 <header class="container-fluid">
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
    
-
+<!-- 
 <div class="btn-group">
-  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <button type="button" class="btn btn-danger dropdown-add" data-add="dropdown" aria-haspopup="true" aria-expanded="false">
     Choose Algorithm
   </button>
   <div class="dropdown-menu">
@@ -76,12 +93,26 @@ body {
     <a class="dropdown-item" href="#">A* Search</a>
     <a class="dropdown-item" href="#">Breadth First Search</a>
   </div>
-</div>
+</div> -->
 
 <!-- 
-<button type="button" class="btn btn-outline-warning" style="margin-left: 10px">Clear Path</button>
-<button type="button" style="margin-left: 10px" class="btn btn-outline-success" onclick="clearwall()">Clear Walls</button> -->
-<button type="button" style="margin-left: 10px" onclick="bfs()" class="btn btn-outline-warning">Visualise Algorithm <span></span></button>
+<button type="button" class="btn btn-outline-warning" style="margin-left: 10px">Clear Path</button>-->
+<button type="button" style="margin-left: 10px" onclick="bfs()" class="btn btn-outline-warning">Visualise Breadth First Search <span></span></button>
+
+<button type="button" style="margin-left: 10px" class="btn btn-outline-success" onclick="clearwall()">Clear Walls</button> 
+
+<div class="form-check-inline" style="margin-left: 5px;">
+  <label class="form-check-label" style="color: white;">
+    <input   id ="myRadio"  type="radio" class="form-check-input" name="optradio" checked="true"> Allow Horizontal Traversal
+  </label>
+</div>
+<div class="form-check-inline">
+  <label class="form-check-label" style="color: white;">
+    <input id ="myRadio2" type="radio" class="form-check-input" name="optradio"> Allow Diagonal Traversal
+  </label>
+</div>
+
+
 
 <div class="wall" style="width:25px; height: 25px;   border: 1px solid white;margin-left: 25px;
 "></div> <label class="" style="color: white ;margin-left: 10px; margin-top: 10px;">Walls Node</label>
@@ -131,6 +162,7 @@ body {
 </div>
 <script >
   
+  var parent=new Map();
   var m = 28;
   var n= 60;
  var rs = m/2 -1;
@@ -155,7 +187,6 @@ for (var i = 0; i < m; i++){
         if(i== rs && j== cs)
         {
           document.getElementById(ID).innerHTML  += tdstart;
-
           continue;
         }
 
@@ -176,22 +207,31 @@ for (var i = 0; i < m; i++){
 }
 
 
-
 var mouseIsDown = false;
 var mouseIsUp = true;
 var f=0, g=0;
 function mouseclick(grid){
 
-  if ( grid.classList.contains('notvisited') ){
+if ( grid.classList.contains('notvisited') ){
 grid.classList.remove('notvisited');
-
- grid.classList.toggle('wall');
+ grid.classList.add('wall');
 }
 
+if ( grid.classList.contains('visited') ){
+grid.classList.remove('visited');
 
-else if ( grid.classList.contains('wall') ){
-grid.classList.remove('wall');
-grid.classList.toggle('notvisited');
+ grid.classList.add('wall');
+}
+
+if ( grid.classList.contains('pathnode') ){
+grid.classList.remove('pathnode');
+ grid.classList.add('wall');
+}
+
+else if ( grid.classList.contains('wall') )
+{
+  grid.classList.remove('wall');
+  grid.classList.add('notvisited');
 }
 
 }
@@ -201,15 +241,15 @@ function mousedown(grid){
     if ( grid.classList.contains('startnode') ){
         f=1;
         grid.classList.remove('startnode');
-        grid.classList.toggle('notvisited');
+        grid.classList.add('notvisited');
 
     }
-  
 
-  else  if ( grid.classList.contains('endnode') ){
+  else  if ( grid.classList.contains('endnode') )
+  {
         g=1;
         grid.classList.remove('endnode');
-        grid.classList.toggle('notvisited');
+        grid.classList.add('notvisited');
 
     }
 
@@ -219,7 +259,8 @@ function mousedown(grid){
   }
 }
 
-function mouseup(grid){
+function mouseup(grid)
+{
   
   if(f==1 )
   {
@@ -227,23 +268,24 @@ function mouseup(grid){
       {
          f=0;
         grid.classList.remove('notvisited');
-        grid.classList.toggle('startnode');
+        grid.classList.add('startnode');
       }
    
   }
 
 
-   if(g==1 )
+  if(g==1 )
   {
        
         if(!grid.classList.contains('startnode'))
         {grid.classList.remove('notvisited');
-        grid.classList.toggle('endnode');  g=0;
+        grid.classList.add('endnode');  g=0;
     }
   }
 
   mouseIsDown= false;
   mouseIsUp= true;
+
 }
 
 function changeColor(grid){
@@ -254,42 +296,97 @@ if(mouseIsDown){
 
 if ( grid.classList.contains('notvisited') ){
 grid.classList.remove('notvisited');
-grid.classList.toggle('wall');
+grid.classList.add('wall');
 }
 
 else if ( grid.classList.contains('wall') ){
 grid.classList.remove('wall');
-grid.classList.toggle('notvisited');
+grid.classList.add('notvisited');
 }
-     
+    
+
+else if ( grid.classList.contains('visited') ){
+grid.classList.remove('visited');
+grid.classList.add('wall');
+} 
+
+
+else if ( grid.classList.contains('pathnode') ){
+grid.classList.remove('pathnode');
+grid.classList.add('wall');
+} 
 
   }
 }
 
 
-// function clearwall(){
-
-// var x=document.querySelector('.wall').id
-// // console.log(x);
-// var i;
-// for (i = 0; i < x.length; i++) {
-
-//   if ( x[i].classList.contains('wall') ){
-
-//   x[i].classList.remove('wall');
-//   x[i].classList.add('notvisited');
-// }
-
-// }
+function clearwall(){
+	for(var i= 0;i< m ;i++)
+	{
+		for(var j=0;j<n;j++){
 
 
-// }
+	      var id = '#row'+i.toString()+' #col'+j.toString();
+	       cell = document.querySelector(id);
+	       
+	       if(cell.classList.contains('wall'))
+	       {
+	          cell.classList.remove('wall');
+	                 cell.classList.add('notvisited');
+	               }
+
+
+
+
+		}
+	}
+
+
+}
+
+
+
+ function reset(){
+ 	for(var i= 0;i< m ;i++)
+	{
+		for(var j=0;j<n;j++){
+
+
+	      var id = '#row'+i.toString()+' #col'+j.toString();
+	       cell = document.querySelector(id);
+	       
+	       if(cell.classList.contains('startnode'))
+	       {
+              continue;
+	       }
+	        if(cell.classList.contains('endnode'))
+	       {
+              continue;
+	       }
+	          // cell.classList.remove('wall');
+
+
+	          cell.classList.remove('visited');
+
+	          cell.classList.remove('pathnode');
+
+	       	  cell.classList.add('notvisited');
+
+
+
+		}
+	}
+
+
+ }
 
 var matrix = [];
 var start =[];
 var dest = [];
 var parent =[];
 // get the matrix 
+
+
 function getGrid()
 {
 
@@ -301,27 +398,29 @@ function getGrid()
       var id = '#row'+i.toString()+' #col'+j.toString();
        cell = document.querySelector(id);
        
-       if(cell.classList.contains('wall')){
+       if(cell.classList.contains('wall'))
+       {
 
             matrix[i].push(1);
        } 
-       else if (cell.classList.contains('notvisited')) {
-            
+       else if (cell.classList.contains('notvisited')) 
+       {     
             matrix[i].push(0);
-
        }
-       else if (cell.classList.contains('startnode')){
+       else if (cell.classList.contains('startnode'))
+       {
             matrix[i].push('s');
             start = [i,j];
-
        } 
 
-       else if (cell.classList.contains('endnode')){
+       else if (cell.classList.contains('endnode'))
+       {
            matrix[i].push('d');
            dest = [i,j];
        }
 
     }
+
 
   }
 
@@ -329,6 +428,7 @@ function getGrid()
 
 }
 
+var flag=0;
 
 function isValid(x,y){
 
@@ -339,128 +439,131 @@ function isValid(x,y){
   return 0;
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 
-function bfs(){
-   
+async function bfs()
+{
+	reset();
+  if(flag==1)
+  return;
+  else flag=1;
+  
     getGrid();
-    // console.log(matrix);
-    var dx=[1,-1,0,0];
-    var dy=[0,0,-1,1];
-// Queue class 
-      class Queue 
-      { 
-          // Array is used to implement a Queue 
-          constructor() 
-          { 
-              this.items = []; 
-          } 
-                        
-          // Functions to be implemented 
-          enqueue(item) {
-            this.items.push(item); 
-          }
-          dequeue() {
-            if(this.isEmpty()) 
-                  return 0; 
-               return this.items.shift();
-          }
-          peek(){
-             if(this.isEmpty()) 
-                return 0; 
-               return this.items[0];
-          } 
-          isEmpty() {
-            return this.items.length == 0; 
-          }
-          // printQueue() 
-      } 
-    var queue = new Queue();
-    parent = [];
-    queue.enqueue(start);
-    while(!queue.isEmpty() )
+
+    
+    var g=[13,17];
+    if(dest==g)
     {
+      console.log("I am bfs");
+    }
+   var size=4;
+   if(document.getElementById("myRadio").checked)
+   {
+      size =4;
+   }
+   if(document.getElementById("myRadio2").checked)
+   {
+      size =8;
+   }
+   
 
+    var parent=new Map();
+    var dx=[1,-1,0,0,1,-1,1,-1];
+    var dy=[0,0,-1,1,1,-1,-1,1];
+    
+    parent=new Map();
+  
+// Queue class 
 
-      var a= queue.peek();
-      queue.dequeue();
+    var queue = [];
+      parent.clear();
+      // var start=[13,15];
+    queue.push(start);
+    parent.set(start, start);
 
+    var flag=0;
+    while(queue.length!=0 )
+    {
+      
+      
+     // var a= queue.peek();
+     var  a= queue[0];
+
+      
+      //queue.dequeue();
+      queue.shift();
       var xcord = a[0];
       var ycord = a[1];
       
-      for (var i=0;i<4;i++)
+      for (var i=0;i< size;i++)
       {
 
    
         var x = xcord  + dx[i];
         var y = ycord + dy[i];
 
-        if ( isValid(x,y)){
-          if(matrix[x][y] ==2 || matrix[x][y] ==1){
+        if (isValid(x,y))
+        {
+          if(matrix[x][y]==2 || matrix[x][y]==1)
+          {
             continue;
           }
 
-
-
-            parent[[x,y]]= a;
+          var b=[x,y];
           
+          parent.set(b,a);
+          
+          // var z= parent.get(b);
+          
+          // console.log(z);
+          
+          // console.log(parent.get(z));
+          // console.log("parent");
             
           var id = '#row'+x.toString()+' #col'+y.toString();
-           cell = document.querySelector(id);
+          cell = document.querySelector(id);
            // if(cell.classList.contains('notvisited')){
-
-             
-
-             cell.classList.remove('notvisited');
-             cell.classList.toggle('visited');
-             matrix[x][y]=2;
-
-
+            cell.classList.remove('notvisited');
+            cell.classList.add('visited');
+            matrix[x][y]=2;
+            await sleep(5);
            // console.log("reached here");
                // console.log(matrix);
+            
+           if(b[0]==dest[0] && b[1]==dest[1])
+           {  
+            
+           	var f=parent.get(b);
 
-           if(x== dest[0] && y==dest[1]){
+            while( parent.get(f) != f)
+              {
+             	var id = '#row'+f[0].toString()+' #col'+f[1].toString();
+           		cell = document.querySelector(id);
+
+            	cell.classList.remove('visited');
+            	cell.classList.add('pathnode');
+             	f= parent.get(f);
+
+              }
+
             return;
+            
            }
-
-           queue.enqueue([x,y]);
-
-
-                      
-
+            queue.push(b);
         }
-
-
+        
       }
-    
-
 
     }
+    flag=0;
+    window.alert("Path is not possible, please remove some walls!!!");
+    
  }
 
-function pathfinder(){
-  console.log("hadbfaehrbou");
 
-   if(matrix[dest[0]][dest[1]] != 2)
-   	 {
-   	 	return;
-   	 }
-   var a= dest;
-   var ans= [];
-   while( parent[a] != a  )
-   {
-      
-          var id = '#row'+a[0].toString()+' #col'+a[1].toString();
-          console.log(id);
-             cell = document.querySelector(id);
-             // cell.classList.remove('notvisited');
-             // cell.classList.remove('visited');
-             
-             // cell.classList.add('pathnode');
-   	         a = parent[a];
-   }
-
-}
 
 </script>
 
@@ -483,11 +586,8 @@ function pathfinder(){
         <li>Click within the grid and drag the mouse to draw walls.</li>
         <li>Drag the start and end node to any position.</li>
         <li> Choose an algorithm from the navigation panel.</li>
-        <li>Click the Visulaise algorithm button to see the algorithms in action.</li>
+        <li>Click the Visualise algorithm button to see the algorithms in action.</li>
       </ul>
-
-
-
       </div>
       
     </div>
