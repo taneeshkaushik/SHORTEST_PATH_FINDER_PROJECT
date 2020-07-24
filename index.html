@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,7 +56,7 @@ box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
 
 }
 .pathnode{
-  background-color: lightgreen;
+  background-color: #f0516c;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
 
 }
@@ -83,21 +84,11 @@ body {
 <header class="container-fluid">
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
    
-<!-- 
-<div class="btn-group">
-  <button type="button" class="btn btn-danger dropdown-add" data-add="dropdown" aria-haspopup="true" aria-expanded="false">
-    Choose Algorithm
-  </button>
-  <div class="dropdown-menu">
-    <a class="dropdown-item" href="#">Dijkstra</a>
-    <a class="dropdown-item" href="#">A* Search</a>
-    <a class="dropdown-item" href="#">Breadth First Search</a>
-  </div>
-</div> -->
 
-<!-- 
-<button type="button" class="btn btn-outline-warning" style="margin-left: 10px">Clear Path</button>-->
-<button type="button" style="margin-left: 10px" onclick="astar()" class="btn btn-outline-warning">Visualise Breadth First Search <span></span></button>
+<button type="button" style="margin-left: 10px" onclick="bfs()" class="btn btn-outline-warning">Visualise BFS <span></span></button>
+
+
+<button type="button" style="margin-left: 10px" onclick="astar()" class="btn btn-outline-danger">Visualise A-star <span></span></button>
 
 <button type="button" style="margin-left: 10px" class="btn btn-outline-success" onclick="clearwall()">Clear Walls</button> 
 
@@ -112,36 +103,25 @@ body {
   </label>
 </div>
 
-
-<div class="wall" style="width:25px; height: 25px;   border: 1px solid white;margin-left: 25px;
-"></div> <label class="" style="color: white ;margin-left: 10px; margin-top: 10px;">Walls Node</label>
-
-
-
-<div  class="pathnode" style="width:25px; height: 25px;  border: 1px solid white; margin-left: 25px;
-"></div> 
-<label class="" style="color: white ;margin-left: 10px; margin-top: 10px; "> Path Node</label>
-
-
-<div class="visited pull-right"  style="width:25px; height: 25px;    border: 1px solid white;margin-left: 25px;
-"></div>
-<label class="" style="color: white ;margin-left: 10px; margin-top: 10px;"> Visited Node</label>
+	
+	<h3 style="color: white; margin-left:40px;">Choose Heuristic:</h3>
 
 
 
-<div class="notvisited pull-right"  style="width:25px; height: 25px;    border: 1px solid white;margin-left: 25px;
-"></div>
-<label class="" style="color: white ;margin-left: 10px; margin-top: 10px;"> Unvisited Node</label>
+  <form style="margin-left: 10px;">
+    <label class="form-check-label radio-inline" style="color: white">
+      <input id= "heur1" type="radio" name="optradio" checked>  Manhattan Distance  
+    </label>
+    <label class="form-check-label radio-inline" style="color: white">
+      <input id= "heur2" type="radio" name="optradio">  Diagonal Distance  
+    </label>
+    <label class="form-check-label radio-inline"  style="color: white" >
+      <input id= "heur3" type="radio" name="optradio">  Euclidean Distance  
+    </label>
+  </form>
 
 
-<div class="startnode pull-right"  style="width:25px; height: 25px;    border: 1px solid white;margin-left: 25px;
-"></div>
-<label class="" style="color: white ;margin-left: 10px; margin-top: 10px;"> Start Node</label>
 
-
-<div class="endnode pull-right"  style="width:25px; height: 25px;    border: 1px solid white;margin-left: 25px;
-"></div>
-<label class="" style="color: white ;margin-left: 10px; margin-top: 10px;"> Destination Node</label>
 
 
 
@@ -149,6 +129,37 @@ body {
 
 </header>
 
+
+
+<div class="wall" style="width:25px;float:left; height: 25px; margin-top: 5px;  border: 1px solid white;margin-left: 25px;
+"></div> <label class="" style="float:left; color: black ;margin-left: 10px; margin-top: 10px;">Walls Node</label>
+
+
+
+<div  class="pathnode" style="width:25px;float:left; height: 25px; margin-top: 5px; border: 1px solid white; margin-left: 25px;
+"></div> 
+<label class="" style="color: black ;float:left; margin-left: 10px; margin-top: 10px; "> Path Node</label>
+
+
+<div class="visited pull-right"  style="float:left; width:25px; height: 25px; margin-top: 5px;   border: 1px solid white;margin-left: 25px;
+"></div>
+<label class="" style="color: black ;float:left; margin-left: 10px; margin-top: 10px;"> Visited Node</label>
+
+
+
+<div class="notvisited pull-right"  style="float:left;  width:25px; height: 25px; margin-top: 5px;   border: 1px solid white;margin-left: 25px;
+"></div>
+<label class="" style="color: black ; float:left; margin-left: 10px; margin-top: 10px;"> Unvisited Node</label>
+
+
+<div class="startnode pull-right"  style="float:left; width:25px; height: 25px;    border: 1px solid white;margin-left: 25px; margin-top: 5px;
+"></div>
+<label class="" style=" float:left; color: black ;margin-left: 10px; margin-top: 10px;"> Start Node</label>
+
+
+<div class="endnode pull-right"  style=" float:left; width:25px; height: 25px;margin-top: 5px;    border: 1px solid white;margin-left: 25px;
+"></div>
+<label class="" style="color: black ;float:left;  margin-left: 10px; margin-top: 10px;"> Destination Node</label>
 
 <br>
 <br>
@@ -160,8 +171,7 @@ body {
 </table>
 </div>
 <script >
- 
-
+  
   var parent=new Map();
   var m = 28;
   var n= 60;
@@ -386,15 +396,17 @@ var dest = [];
 var parent =[];
 // get the matrix 
 var flag=0;
+
 var graph=[];
 var closedmatrix=[];
 
-var dx=[1,-1,0,0,1,-1,1,-1];
+
+    var dx=[1,-1,0,0,1,-1,1,-1];
     var dy=[0,0,-1,1,1,-1,-1,1];
 
 function getGrid()
 {
-  flag=0;
+
   for (var i=0 ;i< m;i++)
   {
     matrix[i] = new Array();
@@ -433,7 +445,7 @@ function getGrid()
 
 }
 
-
+var flag=0;
 
 function isValid(x,y){
 
@@ -449,20 +461,23 @@ function sleep(ms) {
 }
 
 
-async function bfs(flag)
+async function bfs()
 {
-  
-  
 	reset();
   if(flag==1)
-    return;
+  return;
   else flag=1;
   
     getGrid();
 
     
-    
-   var size=4;
+    var g=[13,17];
+    if(dest==g)
+    {
+      console.log("I am bfs");
+    }
+   
+var size=4;
    if(document.getElementById("myRadio").checked)
    {
       size =4;
@@ -472,9 +487,7 @@ async function bfs(flag)
       size =8;
    }
    
-
     var parent=new Map();
- 
     
     parent=new Map();
   
@@ -482,7 +495,6 @@ async function bfs(flag)
 
     var queue = [];
       parent.clear();
-      
       // var start=[13,15];
     queue.push(start);
     parent.set(start, start);
@@ -492,11 +504,11 @@ async function bfs(flag)
     {
       
       
-     
+     // var a= queue.peek();
      var  a= queue[0];
 
       
-      
+      //queue.dequeue();
       queue.shift();
       var xcord = a[0];
       var ycord = a[1];
@@ -519,39 +531,18 @@ async function bfs(flag)
           
           parent.set(b,a);
           
-          
-            
           var id = '#row'+x.toString()+' #col'+y.toString();
           cell = document.querySelector(id);
-          
+           // if(cell.classList.contains('notvisited')){
             cell.classList.remove('notvisited');
             cell.classList.add('visited');
             matrix[x][y]=2;
             await sleep(5);
-           
+           // console.log("reached here");
+               // console.log(matrix);
             
            if(b[0]==dest[0] && b[1]==dest[1])
            {  
-
-                while(1)
-                {
-                  var a= parent.get(b);
-                  if(a[0]==b[0]&& a[1]==b[1])
-                  {
-                    flag=0;
-                    
-                    return;
-                  }
-
-                  b=a;
-                  var id = '#row'+b[0].toString()+' #col'+b[1].toString();
-                  cell = document.querySelector(id);
-           // if(cell.classList.contains('notvisited')){
-                  cell.classList.remove('visited');
-                  cell.classList.toggle('notvisited');
-                  
-                  
-                }
             
            	var f=parent.get(b);
 
@@ -579,7 +570,7 @@ async function bfs(flag)
     window.alert("Path is not possible, please remove some walls!!!");
     
  }
- 
+
 
 function hval(i , j, dest, heur)
 {
@@ -598,6 +589,32 @@ function hval(i , j, dest, heur)
 
 async function astar()
 {
+
+var heuristic = 1;
+if(document.getElementById("heur1").checked)
+   {
+      heuristic =1;
+   }
+   if(document.getElementById("heur2").checked)
+   {
+      heuristic =2;
+   }
+if(document.getElementById("heur3").checked)
+   {
+      heuristic =3;
+   }
+
+
+var size=4;
+   if(document.getElementById("myRadio").checked)
+   {
+      size =4;
+   }
+   if(document.getElementById("myRadio2").checked)
+   {
+      size =8;
+   }
+   
   class Node 
   {
     
@@ -657,10 +674,6 @@ async function astar()
 
   var a=start[0];
    var b=start[1];
-   console.log(a);
-   console.log(b);
-  console.log(start);
-//console.log(graph[0][0]);
   graph[a][b].f=0;
   graph[a][b].g=0;
   graph[a][b].h=0;
@@ -675,7 +688,7 @@ async function astar()
   openlist.push(graph[a][b]);
   while(openlist.length!=0)
   {
-    console.log(openlist.length);
+    // console.log(openlist.length);
     var k=openlist.length;
     var a=openlist[0];
     var index=0;
@@ -696,33 +709,45 @@ async function astar()
           
         cell.classList.remove('notvisited');
         cell.classList.add('visited');
-    
+             await sleep(5);
+
     var gnew, hnew,fnew;
     var x, y;
     x=a.x;
     y=a.y;
-    for(var p=0;p<4;p++)
+    for(var p=0;p< size;p++)
     { 
       var i=  a.x+dx[p];
-      var j=a.y+ dy[p];
+      var j=  a.y+ dy[p];
       if(!isValid(i,j))
         continue;
       
       if(dest[0]==i && dest[1]==j)
       { 
-        console.log("helo");
-        while(graph[i][j].parent[0]!=i && graph[i][j].parent[1]!=j)
+
+        graph[i][j].parent=[x,y];
+         var path= graph[x][y].parent;
+         
+         // console.log(y);
+         var id = '#row'+x.toString()+' #col'+ y.toString();
+         cell = document.querySelector(id);
+        cell.classList.remove('visited');
+        cell.classList.add('pathnode');
+           var idx;
+        while(true)
         {
-          var id = '#row'+(graph[i][j].parent[0]).toString()+' #col'+(graph[i][j].parent[0]).toString();
-                  cell = document.querySelector(id);
-           // if(cell.classList.contains('notvisited')){
-                  cell.classList.remove('visited');
-                  cell.classList.toggle('notvisited');
-                  
+            
+           if(path[0] == start[0] && path[1]==start[1])
+           	 {break;}
+
+          idx = '#row'+path[0].toString()+' #col'+ path[1].toString();
+          cell = document.querySelector(idx);
+        cell.classList.remove('visited');
+        cell.classList.add('pathnode');
+        path = graph[path[0]][path[1]].parent;
+
+
         }
-
-
-        window.alert("Yeyyy!!!!   Path found");
         return;  
       }
 
