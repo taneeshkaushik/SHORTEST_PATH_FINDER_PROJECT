@@ -596,7 +596,7 @@ function hval(i , j, dest, heur)
 
 
 
-function astar()
+async function astar()
 {
   class Node 
   {
@@ -710,11 +710,19 @@ function astar()
       
       if(dest[0]==i && dest[1]==j)
       { 
-        graph[i][j].parent=[x,y];
+        console.log("helo");
         while(graph[i][j].parent[0]!=i && graph[i][j].parent[1]!=j)
         {
-          //// color kardio ise green
+          var id = '#row'+(graph[i][j].parent[0]).toString()+' #col'+(graph[i][j].parent[0]).toString();
+                  cell = document.querySelector(id);
+           // if(cell.classList.contains('notvisited')){
+                  cell.classList.remove('visited');
+                  cell.classList.toggle('notvisited');
+                  
         }
+
+
+        window.alert("Yeyyy!!!!   Path found");
         return;  
       }
 
